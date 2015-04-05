@@ -1,0 +1,37 @@
+<link rel="import" href="../polymer/polymer.html" />
+<link rel="import" href="../core-overlay/core-overlay.html" />
+<polymer-element name="mygod-image" attributes="alt src">
+    <template>
+        <img id="small" alt="{{alt}}" src="{{src}}" on-tap="{{toggle}}"
+             style="cursor: {{expandingEnabled ? 'pointer' : 'default'}}; max-width: 100%; max-height: {{maxHeight}};" />
+        <core-overlay id="dialog" backdrop layered transition="core-transition-center" style="font-size: 0;">
+            <img alt="{{alt}}" src="{{src}}" core-overlay-toggle />
+        </core-overlay>
+    </template>
+    <script>
+        var proto = {
+            publish: {
+                maxHeight: 'auto'
+            },
+            eventDelegates: {
+                'core-resize': 'update'
+            },
+            attached: function() {
+                var that = this;
+                this.$.small.onload = function() {
+                    that.expandingEnabled = this.naturalWidth > this.clientWidth ||
+                        this.naturalHeight > this.clientHeight;
+                };
+            },
+            update: function() {
+                var img = this.$.small;
+                this.expandingEnabled = img.naturalWidth > img.clientWidth || img.naturalHeight > img.clientHeight;
+            },
+            toggle: function() {
+                if (this.expandingEnabled) this.$.dialog.toggle();
+            }
+        };
+        Polymer.mixin(proto, Polymer.CoreResizable);
+        Polymer(proto);
+    </script>
+</polymer-element>

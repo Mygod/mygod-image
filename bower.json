@@ -1,0 +1,25 @@
+{
+  "name": "mygod-image",
+  "version": "1.0.0",
+  "authors": [
+    "Mygod <mygodstudio@gmail.com>"
+  ],
+  "description": "A better img used in mygod.tk made with Polymer. Auto fits parent's width and supports in-page popup view.",
+  "keywords": [
+    "Polymer",
+    "web-components"
+  ],
+  "license": "GPLv3",
+  "homepage": "https://github.com/Mygod/mygod-image",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer",
+    "core-overlay": "Polymer/core-overlay"
+  }
+}

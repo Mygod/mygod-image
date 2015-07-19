@@ -1,37 +1,88 @@
-<link rel="import" href="../polymer/polymer.html" />
-<link rel="import" href="../core-overlay/core-overlay.html" />
-<polymer-element name="mygod-image" attributes="alt src">
-    <template>
-        <img id="small" alt="{{alt}}" src="{{src}}" on-tap="{{toggle}}"
-             style="cursor: {{expandingEnabled ? 'pointer' : 'default'}}; max-width: 100%; max-height: {{maxHeight}};" />
-        <core-overlay id="dialog" backdrop layered transition="core-transition-center" style="font-size: 0;">
-            <img alt="{{alt}}" src="{{src}}" core-overlay-toggle />
-        </core-overlay>
-    </template>
-    <script>
-        var proto = {
-            publish: {
-                maxHeight: 'auto'
-            },
-            eventDelegates: {
-                'core-resize': 'update'
-            },
-            attached: function() {
-                var that = this;
-                this.$.small.onload = function() {
-                    that.expandingEnabled = this.naturalWidth > this.clientWidth ||
-                        this.naturalHeight > this.clientHeight;
-                };
-            },
-            update: function() {
-                var img = this.$.small;
-                this.expandingEnabled = img.naturalWidth > img.clientWidth || img.naturalHeight > img.clientHeight;
-            },
-            toggle: function() {
-                if (this.expandingEnabled) this.$.dialog.toggle();
-            }
-        };
-        Polymer.mixin(proto, Polymer.CoreResizable);
-        Polymer(proto);
-    </script>
-</polymer-element>
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<!--
+A better img used in mygod.tk made with Polymer. Auto fits parent's width and supports in-page popup view.
+
+Example:
+
+    <mygod-image src="pic.png" alt="My picture"></mygod-image>
+
+@group Mygod Elements
+@element mygod-image
+@demo demo/index.html
+@hero hero.svg
+-->
+<dom-module id="mygod-image">
+  <style>
+    #dialog {
+      background: transparent;
+      box-shadow: none;
+      font-size: 0;
+      line-height: 0;
+      margin: 0;
+    }
+
+    #full {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <template>
+    <img id="thumbnail" alt="[[alt]]" src="[[src]]" on-click="open" on-load="_update" />
+    <paper-dialog id="dialog" with-backdrop entry-animation="fade-in-animation" exit-animation="fade-out-animation"
+                  on-iron-overlay-opened="_patchOverlay">
+      <img id="full" alt="[[alt]]" src="[[src]]" dialog-dismiss />
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'mygod-image',
+      behaviors: [Polymer.IronResizableBehavior],
+      properties: {
+        alt: String,
+        src: String,
+        maxWidth: {
+          type: String,
+          value: '100%',
+          observer: '_update'
+        },
+        maxHeight: {
+          type: String,
+          value: 'auto',
+          observer: '_update'
+        },
+        /**
+         * `expandingEnabled` indicates that the images has been resized and a popup view is available.
+         */
+        expandingEnabled: {
+          type: Boolean,
+          value: false,
+          readOnly: true
+        }
+      },
+      listeners: {
+        'iron-resize': '_update'
+      },
+      _update: function () {
+        var img = this.$.thumbnail;
+        img.style.maxWidth = this.maxWidth;
+        img.style.maxHeight = this.maxHeight;
+        var enabled = img.naturalWidth > img.clientWidth || img.naturalHeight > img.clientHeight;
+        this._setExpandingEnabled(enabled);
+        img.style.cursor = enabled ? 'pointer' : 'default';
+      },
+      /**
+       * Show the popup image if it's available.
+       */
+      open: function () {
+        if (this.expandingEnabled) this.$.dialog.open();
+      },
+      /**
+       * https://github.com/PolymerElements/paper-dialog/issues/7
+       * @private
+       */
+      _patchOverlay: function (e) {
+        if (e.target.withBackdrop) e.target.parentNode.insertBefore(e.target._backdrop, e.target);
+      }
+    });
+  </script>
+</dom-module>

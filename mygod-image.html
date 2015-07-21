@@ -1,5 +1,5 @@
-<link rel="import" href="../neon-animation/animations/fade-in-animation.html" />
-<link rel="import" href="../neon-animation/animations/fade-out-animation.html" />
+<link rel="import" href="../neon-animation/animations/scale-down-animation.html" />
+<link rel="import" href="../neon-animation/animations/scale-up-animation.html" />
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <!--
 A better img used in mygod.tk made with Polymer. Auto fits parent's width and supports in-page popup view.
@@ -30,8 +30,7 @@ Example:
   </style>
   <template>
     <img id="thumbnail" alt="[[alt]]" src="[[src]]" on-click="open" on-load="_update" />
-    <paper-dialog id="dialog" with-backdrop entry-animation="fade-in-animation" exit-animation="fade-out-animation"
-                  on-iron-overlay-opened="_patchOverlay">
+    <paper-dialog id="dialog" with-backdrop entry-animation="scale-up-animation" exit-animation="scale-down-animation">
       <img id="full" alt="[[alt]]" src="[[src]]" dialog-dismiss />
     </paper-dialog>
   </template>
@@ -77,13 +76,6 @@ Example:
        */
       open: function () {
         if (this.expandingEnabled) this.$.dialog.open();
-      },
-      /**
-       * https://github.com/PolymerElements/paper-dialog/issues/7
-       * @private
-       */
-      _patchOverlay: function (e) {
-        if (e.target.withBackdrop) e.target.parentNode.insertBefore(e.target._backdrop, e.target);
       }
     });
   </script>

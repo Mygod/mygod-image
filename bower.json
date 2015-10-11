@@ -17,7 +17,7 @@
     "LICENSE"
   ],
   "dependencies": {
-    "paper-dialog": "PolymerElements/paper-dialog#~1.0.1"
+    "paper-dialog": "PolymerElements/paper-dialog#~1.0.2"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.5"

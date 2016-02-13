@@ -1,6 +1,6 @@
 {
   "name": "mygod-image",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "authors": [
     "Mygod <mygodstudio@gmail.com>"
   ],
@@ -11,15 +11,16 @@
   ],
   "main": "mygod-image.html",
   "license": "GPLv3",
-  "homepage": "https://github.com/Mygod/mygod-image/",
+  "homepage": "https://github.com/Mygod/mygod-image",
   "ignore": [
     "/.*",
     "LICENSE"
   ],
   "dependencies": {
-    "paper-dialog": "PolymerElements/paper-dialog#~1.0.2"
+    "paper-dialog": "PolymerElements/paper-dialog#^1.0.4",
+    "paper-tooltip": "PolymerElements/paper-tooltip#^1.1.1"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.5"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.4"
   }
 }

@@ -1,6 +1,7 @@
 <link rel="import" href="../neon-animation/animations/scale-down-animation.html" />
 <link rel="import" href="../neon-animation/animations/scale-up-animation.html" />
 <link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-tooltip/paper-tooltip.html">
 <!--
 A better img used in mygod.tk made with Polymer. Auto fits parent's width and supports in-page popup view.
 
@@ -32,6 +33,9 @@ Example:
   </style>
   <template>
     <img id="thumbnail" alt="[[alt]]" src="[[src]]" on-click="open" on-load="_update" />
+    <template is="dom-if" if="[[!disableTooltip]]">
+      <paper-tooltip for="thumbnail">[[alt]]</paper-tooltip>
+    </template>
     <paper-dialog id="dialog" with-backdrop entry-animation="scale-up-animation" exit-animation="scale-down-animation">
       <img id="full" alt="[[alt]]" src="[[src]]" dialog-dismiss />
     </paper-dialog>
@@ -43,6 +47,10 @@ Example:
       properties: {
         alt: String,
         src: String,
+        disableTooltip: {
+          type: Boolean,
+          value: false
+        },
         maxWidth: {
           type: String,
           value: '100%',

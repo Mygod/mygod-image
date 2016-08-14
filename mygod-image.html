@@ -1,13 +1,17 @@
-<link rel="import" href="../neon-animation/animations/scale-down-animation.html" />
-<link rel="import" href="../neon-animation/animations/scale-up-animation.html" />
-<link rel="import" href="../paper-dialog/paper-dialog.html">
-<link rel="import" href="../paper-tooltip/paper-tooltip.html">
+<link rel="import" href="../neon-animation/animations/scale-down-animation.html"/>
+<link rel="import" href="../neon-animation/animations/scale-up-animation.html"/>
+<link rel="import" href="../paper-dialog/paper-dialog.html"/>
+<link rel="import" href="../paper-tooltip/paper-tooltip.html"/>
 <!--
 A better img used in mygod.tk made with Polymer. Auto fits parent's width and supports in-page popup view.
 
+mygod-image-dialog should be used at content root and only once.
+
 Example:
 
-    <mygod-image src="pic.png" alt="My picture"></mygod-image>
+    <mygod-image src="pic1.png" alt="My picture #1"></mygod-image>
+    <mygod-image src="pic2.png" alt="My picture #2"></mygod-image>
+    <mygod-image-dialog></mygod-image-dialog>
 
 @group Mygod Elements
 @element mygod-image
@@ -15,6 +19,14 @@ Example:
 @hero hero.svg
 -->
 <dom-module id="mygod-image">
+  <template>
+    <img id="thumbnail" alt="[[alt]]" src="[[src]]" on-click="open" on-load="_update"/>
+    <template is="dom-if" if="[[!disableTooltip]]">
+      <paper-tooltip for="thumbnail">[[alt]]</paper-tooltip>
+    </template>
+  </template>
+</dom-module>
+<dom-module id="mygod-image-dialog">
   <style>
     #dialog {
       background: transparent;
@@ -31,81 +43,91 @@ Example:
     }
   </style>
   <template>
-    <img id="thumbnail" alt="[[alt]]" src="[[src]]" on-click="open" on-load="_update" />
-    <template is="dom-if" if="[[!disableTooltip]]">
-      <paper-tooltip for="thumbnail">[[alt]]</paper-tooltip>
-    </template>
     <paper-dialog id="dialog" with-backdrop entry-animation="scale-up-animation" exit-animation="scale-down-animation">
-      <img id="full" alt="[[alt]]" src="[[src]]" dialog-dismiss />
+      <img id="full" alt="[[alt]]" src="[[src]]" dialog-dismiss/>
     </paper-dialog>
   </template>
-  <script>
-    Polymer({
-      is: 'mygod-image',
-      behaviors: [Polymer.IronResizableBehavior],
-      properties: {
-        alt: String,
-        src: {
-          type: String,
-          notify: true,
-          reflectToAttribute: true
-        },
-        disableTooltip: {
-          type: Boolean,
-          value: false
-        },
-        width: {
-          type: String,
-          value: 'auto',
-          notify: true,
-          observer: '_update'
-        },
-        height: {
-          type: String,
-          value: 'auto',
-          notify: true,
-          observer: '_update'
-        },
-        maxWidth: {
-          type: String,
-          value: '100%',
-          notify: true,
-          observer: '_update'
-        },
-        maxHeight: {
-          type: String,
-          value: '100%',
-          notify: true,
-          observer: '_update'
-        },
-        /**
-         * `expandingEnabled` indicates that the images has been resized and a popup view is available.
-         */
-        expandingEnabled: {
-          type: Boolean,
-          value: false,
-          readOnly: true
-        }
+</dom-module>
+<script>
+  Polymer({
+    is: 'mygod-image',
+    behaviors: [Polymer.IronResizableBehavior],
+    properties: {
+      alt: String,
+      src: {
+        type: String,
+        notify: true,
+        reflectToAttribute: true
       },
-      listeners: {
-        'iron-resize': '_update'
+      disableTooltip: {
+        type: Boolean,
+        value: false
       },
-      _update: function () {
-        var img = this.$.thumbnail;
-        img.style.width = this.width;
-        img.style.height = this.height;
-        img.style.maxWidth = this.maxWidth;
-        img.style.maxHeight = this.maxHeight;
-        var enabled = img.naturalWidth > img.clientWidth || img.naturalHeight > img.clientHeight;
-        this._setExpandingEnabled(enabled);
-        img.style.cursor = enabled ? 'pointer' : 'default';
+      width: {
+        type: String,
+        value: 'auto',
+        notify: true,
+        observer: '_update'
+      },
+      height: {
+        type: String,
+        value: 'auto',
+        notify: true,
+        observer: '_update'
+      },
+      maxWidth: {
+        type: String,
+        value: '100%',
+        notify: true,
+        observer: '_update'
+      },
+      maxHeight: {
+        type: String,
+        value: '100%',
+        notify: true,
+        observer: '_update'
       },
       /**
-       * Show the popup image if it's available.
+       * `expandingEnabled` indicates that the images has been resized and a popup view is available.
        */
-      open: function () {
-        if (this.expandingEnabled) this.$.dialog.open();
+      expandingEnabled: {
+        type: Boolean,
+        value: false,
+        readOnly: true
       }
-    });
-  </script>
-</dom-module>
+    },
+    listeners: {
+      'iron-resize': '_update'
+    },
+    _update: function () {
+      var img = this.$.thumbnail;
+      img.style.width = this.width;
+      img.style.height = this.height;
+      img.style.maxWidth = this.maxWidth;
+      img.style.maxHeight = this.maxHeight;
+      var enabled = img.naturalWidth > img.clientWidth || img.naturalHeight > img.clientHeight;
+      this._setExpandingEnabled(enabled);
+      img.style.cursor = enabled ? 'pointer' : 'default';
+    },
+    /**
+     * Show the popup image if it's available.
+     */
+    open: function () {
+      if (this.expandingEnabled) window.mygodImageDialog.open(this.alt, this.src);
+    }
+  });
+
+  Polymer({
+    is: 'mygod-image-dialog',
+    attached: function () {
+      if (window.mygodImageDialog) console.warn('mygod-image-dialog is being attached more than once.');
+      window.mygodImageDialog = this;
+    },
+    open: function (alt, src) {
+      this.$.dialog.close();
+      this.alt = alt;
+      this.src = src;
+      this.$.dialog.open();
+    }
+  });
+</script>

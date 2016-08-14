@@ -1,18 +1,25 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
-    <title>mygod-image Demo</title>
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="../mygod-image.html">
-  </head>
-  <body unresolved>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>mygod-image Demo</title>
+  <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+  <link rel="import" href="../mygod-image.html">
+</head>
+<body unresolved>
 
-    <p>An example of <code>&lt;mygod-image&gt;</code>:</p>
+  <p>An example of <code>&lt;mygod-image&gt;</code>:</p>
 
+  <mygod-image src="https://i1264.photobucket.com/albums/jj483/MygodStudio/Mygod/indie-musician.jpg~original" alt="Indie Developer" max-width="100px"></mygod-image>
+  <mygod-image src="https://i1264.photobucket.com/albums/jj483/MygodStudio/edgefans/overwrite-bug.png~original" alt="Funny picture" disable-tooltip></mygod-image>
+
+  <paper-dialog id="dialog" with-backdrop entry-animation="scale-up-animation" exit-animation="scale-down-animation">
+    <div>This is a really small dialog!</div>
     <mygod-image src="https://i1264.photobucket.com/albums/jj483/MygodStudio/Mygod/indie-developer.jpg~original" alt="Indie Developer" max-width="100px"></mygod-image>
-    <mygod-image src="https://i1264.photobucket.com/albums/jj483/MygodStudio/edgefans/overwrite-bug.png~original" alt="Funny picture" disable-tooltip></mygod-image>
+  </paper-dialog>
+  <button onclick="document.querySelector('#dialog').open();">Click for a dialog!</button>
+  <mygod-image-dialog></mygod-image-dialog>
 
-  </body>
+</body>
 </html>

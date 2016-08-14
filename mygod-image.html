@@ -45,19 +45,37 @@ Example:
       behaviors: [Polymer.IronResizableBehavior],
       properties: {
         alt: String,
-        src: String,
+        src: {
+          type: String,
+          notify: true,
+          reflectToAttribute: true
+        },
         disableTooltip: {
           type: Boolean,
           value: false
         },
+        width: {
+          type: String,
+          value: 'auto',
+          notify: true,
+          observer: '_update'
+        },
+        height: {
+          type: String,
+          value: 'auto',
+          notify: true,
+          observer: '_update'
+        },
         maxWidth: {
           type: String,
           value: '100%',
+          notify: true,
           observer: '_update'
         },
         maxHeight: {
           type: String,
-          value: 'auto',
+          value: '100%',
+          notify: true,
           observer: '_update'
         },
         /**
@@ -74,6 +92,8 @@ Example:
       },
       _update: function () {
         var img = this.$.thumbnail;
+        img.style.width = this.width;
+        img.style.height = this.height;
         img.style.maxWidth = this.maxWidth;
         img.style.maxHeight = this.maxHeight;
         var enabled = img.naturalWidth > img.clientWidth || img.naturalHeight > img.clientHeight;

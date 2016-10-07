@@ -2,7 +2,7 @@
   "name": "mygod-image",
   "version": "3.0.0",
   "authors": [
-    "Mygod <mygodstudio@gmail.com>"
+    "Mygod <contact-bower@mygod.be>"
   ],
   "description": "A better img used in mygod.tk made with Polymer. Auto fits parent's width and supports in-page popup view.",
   "keywords": [
